@@ -4,17 +4,11 @@ import java.util.List;
 
 import javax.validation.Valid;
 
+import org.hibernate.validator.constraints.Range;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestHeader;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import com.masai.models.CategoryEnum;
 import com.masai.models.Product;
@@ -23,6 +17,7 @@ import com.masai.models.ProductStatus;
 import com.masai.service.ProductService;
 
 import io.swagger.v3.oas.models.security.SecurityScheme.In;
+import org.springframework.web.multipart.MultipartFile;
 
 @RestController
 public class ProductController {
@@ -37,9 +32,23 @@ public class ProductController {
 
 	@PostMapping("/products")
 	public ResponseEntity<Product> addProductToCatalogHandler(@RequestHeader("token") String token,
-			@Valid @RequestBody Product product) {
+															  @RequestParam("productName") String productName,
+															  @RequestParam("price") double price,
+															  @RequestParam("description") String description,
+															  @RequestParam("manufacturer") String manufacturer,
+															  @RequestParam("quantity") int quantity,
+															  @RequestParam("category") String category,
+															  @RequestParam("status") String status, @RequestParam("imageFiles") MultipartFile[] imageFiles) {
+		Product product = new Product();
+		product.setProductName(productName);
+		product.setPrice(price);
+		product.setDescription(description);
+		product.setManufacturer(manufacturer);
+		product.setQuantity(quantity);
+		product.setCategory(CategoryEnum.ELECTRONICS);
+		product.setStatus(ProductStatus.AVAILABLE);
 
-		Product prod = pService.addProductToCatalog(token, product);
+		Product prod = pService.addProductToCatalog(token, product, imageFiles);
 
 		return new ResponseEntity<Product>(prod, HttpStatus.ACCEPTED);
 

@@ -1,14 +1,6 @@
 package com.masai.models;
 
-import javax.persistence.CascadeType;
-import javax.persistence.Entity;
-import javax.persistence.EnumType;
-import javax.persistence.Enumerated;
-import javax.persistence.FetchType;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.ManyToOne;
+import javax.persistence.*;
 import javax.validation.constraints.DecimalMin;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
@@ -22,6 +14,9 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Setter
@@ -65,6 +60,9 @@ public class Product {
 	@ManyToOne(cascade = CascadeType.ALL)
 	@JsonIgnore
 	private Seller seller;
+
+	@ElementCollection
+	private List<String> imageUrls = new ArrayList<>();
 
 //	@ManyToMany
 //	@JsonIgnore

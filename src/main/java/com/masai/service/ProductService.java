@@ -6,10 +6,11 @@ import com.masai.models.CategoryEnum;
 import com.masai.models.Product;
 import com.masai.models.ProductDTO;
 import com.masai.models.ProductStatus;
+import org.springframework.web.multipart.MultipartFile;
 
 public interface ProductService {
 
-	public Product addProductToCatalog(String token, Product product);
+	public Product addProductToCatalog(String token, Product product,MultipartFile[] imageFiles);
 
 	public Product getProductFromCatalogById(Integer id);
 
@@ -24,8 +25,8 @@ public interface ProductService {
 	public List<ProductDTO> getProductsOfCategory(CategoryEnum catenum);
 	
 	public List<ProductDTO> getProductsOfStatus(ProductStatus status);
-	
-	
+
+	public List<String> saveImages(MultipartFile[] imageFiles);
 	
 	public Product updateProductQuantityWithId(Integer id,ProductDTO prodDTO);
 

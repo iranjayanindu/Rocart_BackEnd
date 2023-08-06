@@ -1,9 +1,15 @@
 package com.masai.service;
 
+import java.io.File;
+import java.io.IOException;
+import java.nio.file.Paths;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.ResponseBody;
 
@@ -16,6 +22,7 @@ import com.masai.models.ProductStatus;
 import com.masai.models.Seller;
 import com.masai.repository.ProductDao;
 import com.masai.repository.SellerDao;
+import org.springframework.web.multipart.MultipartFile;
 
 @Service
 public class ProductServiceImpl implements ProductService {
@@ -29,8 +36,11 @@ public class ProductServiceImpl implements ProductService {
 	@Autowired
 	private SellerDao sDao;
 
+	@Value("${upload.path}") // Spring Boot property for the file upload path.
+	private String uploadPath;
+
 	@Override
-	public Product addProductToCatalog(String token, Product product) {
+	public Product 	addProductToCatalog(String token, Product product, MultipartFile[] imageFiles) {
 
 		Product prod = null;
 		Seller seller1 = sService.getCurrentlyLoggedInSeller(token);
@@ -41,8 +51,9 @@ public class ProductServiceImpl implements ProductService {
 
 		if (opt.isPresent()) {
 			Seller seller = opt.get();
-
+			List<String> imageUrl = saveImages(imageFiles);
 			product.setSeller(seller);
+			product.setImageUrls(imageUrl);
 
 			prod = prodDao.save(product);
 			;
@@ -51,6 +62,8 @@ public class ProductServiceImpl implements ProductService {
 			sDao.save(seller);
 
 		} else {
+			List<String> imageUrl = saveImages(imageFiles);
+			prod.setImageUrls(imageUrl);
 			prod = prodDao.save(product);
 			;
 		}
@@ -128,6 +141,24 @@ public class ProductServiceImpl implements ProductService {
 			return list;
 		} else
 			throw new ProductNotFoundException("No products found with given status:" + status);
+	}
+
+	@Override
+	public List<String> saveImages(MultipartFile[] imageFiles) {
+		List<String> imageUrls = new ArrayList<>();
+		for (MultipartFile imageFile : imageFiles) {
+			try {
+				String fileName = UUID.randomUUID().toString() + "_" + imageFile.getOriginalFilename();
+				System.out.println("file name : "+fileName);
+				String filePath = Paths.get(uploadPath, fileName).toString();
+				imageFile.transferTo(new File(filePath));
+				imageUrls.add("/images/" + fileName); // Add the relative URL to the list.
+			} catch (IOException e) {
+				// Handle the exception as needed.
+				throw new RuntimeException("Failed to save image.", e);
+			}
+		}
+		return imageUrls;
 	}
 
 	@Override
