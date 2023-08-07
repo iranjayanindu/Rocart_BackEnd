@@ -4,6 +4,7 @@ import java.util.List;
 
 import javax.validation.Valid;
 
+import com.masai.models.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -15,13 +16,6 @@ import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.masai.models.Address;
-import com.masai.models.CreditCard;
-import com.masai.models.Customer;
-import com.masai.models.CustomerDTO;
-import com.masai.models.CustomerUpdateDTO;
-import com.masai.models.Order;
-import com.masai.models.SessionDTO;
 import com.masai.service.CustomerService;
 
 @RestController
@@ -100,4 +94,16 @@ public class CustomerController {
 	public ResponseEntity<List<Order>> getCustomerOrdersHandler(@RequestHeader("token") String token){
 		return new ResponseEntity<>(customerService.getCustomerOrders(token), HttpStatus.ACCEPTED);
 	}
+
+
+	@GetMapping("/customer/forget")
+	public ResponseEntity<CustomerForgetDTO> getCustomerForget(@RequestParam String email){
+		return new ResponseEntity<>(customerService.getForgetCustomer(email),HttpStatus.OK);
+	}
+
+	@PutMapping("/customer/forget-password")
+	public ResponseEntity<SessionDTO> updateCustomerPassword( @RequestBody CustomerDTO customerDto){
+		return new ResponseEntity<>(customerService.updateCustomerPassword(customerDto), HttpStatus.ACCEPTED);
+	}
+
 }

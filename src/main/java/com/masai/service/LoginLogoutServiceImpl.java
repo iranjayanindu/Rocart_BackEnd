@@ -107,9 +107,29 @@ public class LoginLogoutServiceImpl implements LoginLogoutService{
 		
 		return sessionToken;
 	}
-	
-	
-	
+
+	@Override
+	public SessionDTO logoutCustomerId(Integer userId) {
+		Optional<UserSession> opt = sessionDao.findByUserId(userId);
+		SessionDTO sessionToken = new SessionDTO();
+
+		if(!opt.isPresent()){
+			sessionToken.setMessage("Logged out sucessfully.");
+			return sessionToken;
+		}
+
+
+
+		UserSession session = opt.get();
+
+		sessionDao.delete(session);
+
+		sessionToken.setMessage("Logged out sucessfully.");
+
+		return sessionToken;
+	}
+
+
 	// Method to check status of session token
 	
 	

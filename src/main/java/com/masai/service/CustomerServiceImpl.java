@@ -6,21 +6,13 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
+import com.masai.models.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.masai.exception.CustomerException;
 import com.masai.exception.CustomerNotFoundException;
 import com.masai.exception.LoginException;
-import com.masai.models.Address;
-import com.masai.models.Cart;
-import com.masai.models.CreditCard;
-import com.masai.models.Customer;
-import com.masai.models.CustomerDTO;
-import com.masai.models.CustomerUpdateDTO;
-import com.masai.models.Order;
-import com.masai.models.SessionDTO;
-import com.masai.models.UserSession;
 import com.masai.repository.CustomerDao;
 import com.masai.repository.SessionDao;
 
@@ -257,8 +249,39 @@ public class CustomerServiceImpl implements CustomerService{
 		return session;
 
 	}
-	
-	
+
+	@Override
+	public SessionDTO updateCustomerPassword(CustomerDTO customerDTO) throws CustomerNotFoundException {
+		//Optional<Customer> opt = customerDao.findById(user.getUserId());
+
+		Optional<Customer> opt = customerDao.findCustomerByMobileNo(customerDTO.getMobileId());
+
+		if(opt.isEmpty())
+			throw new CustomerNotFoundException("Customer does not exist");
+
+		Customer existingCustomer = opt.get();
+
+
+//		if(customerDTO.getMobileId().equals(existingCustomer.getMobileNo()) == false) {
+//			throw new CustomerException("Verification error. Mobile number does not match");
+//		}
+
+		existingCustomer.setPassword(customerDTO.getPassword());
+
+		customerDao.save(existingCustomer);
+
+		SessionDTO session = new SessionDTO();
+
+
+
+		loginService.logoutCustomerId(existingCustomer.getCustomerId());
+
+		session.setMessage("Updated password and logged out. Login again with new password");
+
+		return session;
+	}
+
+
 	// Method to add/update Address
 	
 	
@@ -412,11 +435,18 @@ public class CustomerServiceImpl implements CustomerService{
 		return myOrders;
 	}
 
+	@Override
+	public CustomerForgetDTO getForgetCustomer(String email) throws CustomerException {
+		Optional<Customer> byEmailId = customerDao.findByEmailId(email);
+		if(byEmailId.isEmpty())
+			throw new CustomerNotFoundException("Customer does not exist");
+		Customer existingCustomer = byEmailId.get();
 
+		return CustomerForgetDTO.builder()
+				.emailId(existingCustomer.getEmailId())
+				.mobileNo(existingCustomer.getMobileNo())
+				.build();
+	}
 
-	
-	
-	
-	
 
 }

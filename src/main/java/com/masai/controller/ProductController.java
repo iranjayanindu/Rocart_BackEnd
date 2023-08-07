@@ -138,4 +138,10 @@ public class ProductController {
 		List<Product> products = pService.searchProductsByName(productName);
 		return new ResponseEntity<>(products, HttpStatus.OK);
 	}
+
+//	@GetMapping("/top-selling")
+//	public ResponseEntity<List<Product>> getTopSellingProducts(@RequestParam("count") int count, @RequestParam String token) {
+//		List<Product> topSellingProducts = pService.getTopSellingProducts(count);
+//		return new ResponseEntity<>(topSellingProducts, HttpStatus.OK);
+//	}
 }

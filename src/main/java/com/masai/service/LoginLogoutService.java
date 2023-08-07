@@ -11,7 +11,9 @@ public interface LoginLogoutService {
 	public UserSession loginCustomer(CustomerDTO customer);
 	
 	public SessionDTO logoutCustomer(SessionDTO session);
-	
+
+	public SessionDTO logoutCustomerId(Integer cusId);
+
 	public void checkTokenStatus(String token);
 	
 	public void deleteExpiredTokens();
