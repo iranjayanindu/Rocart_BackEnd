@@ -36,4 +36,10 @@ public interface ProductDao extends JpaRepository<Product, Integer> {
 
 	List<Product> findByProductNameContainingIgnoreCase(String partialName);
 
+	@Query(value = "SELECT * FROM product ORDER BY selling_count DESC LIMIT :count", nativeQuery = true)
+	List<Product> findTopSellingProducts(@Param("count") int count);
+
+	@Query(value = "SELECT * FROM product ORDER BY create_time DESC LIMIT :count", nativeQuery = true)
+	List<Product> findNewestProducts(@Param("count") int count);
+
 }

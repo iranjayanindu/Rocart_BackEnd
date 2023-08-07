@@ -30,4 +30,8 @@ public interface ProductService {
 	List<CategoryProductCountDTO> getCategoryProductCount();
 
 	List<Product> searchProductsByName(String productName);
+
+    List<Product> getTopTenSellingProducts();
+
+	List<Product> getNewTenProducts();
 }

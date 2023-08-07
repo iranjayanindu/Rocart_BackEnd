@@ -201,6 +201,18 @@ public class ProductServiceImpl implements ProductService {
 		return prodDao.findByProductNameContainingIgnoreCase(productName);
 	}
 
+	@Override
+	public List<Product> getTopTenSellingProducts() {
+		List<Product> topSellingProducts = prodDao.findTopSellingProducts(10);
+		return topSellingProducts;
+	}
+
+	@Override
+	public List<Product> getNewTenProducts() {
+		List<Product> newestProducts = prodDao.findNewestProducts(10);
+		return newestProducts;
+	}
+
 
 	@Override
 	public List<ProductDTO> getAllProductsOfSeller(Integer id) {

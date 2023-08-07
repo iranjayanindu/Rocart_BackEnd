@@ -139,9 +139,15 @@ public class ProductController {
 		return new ResponseEntity<>(products, HttpStatus.OK);
 	}
 
-//	@GetMapping("/top-selling")
-//	public ResponseEntity<List<Product>> getTopSellingProducts(@RequestParam("count") int count, @RequestParam String token) {
-//		List<Product> topSellingProducts = pService.getTopSellingProducts(count);
-//		return new ResponseEntity<>(topSellingProducts, HttpStatus.OK);
-//	}
+	@GetMapping("/products/top-selling")
+	public ResponseEntity<List<Product>> getTopTenSellingProducts() {
+		List<Product> topSellingProducts = pService.getTopTenSellingProducts();
+		return new ResponseEntity<>(topSellingProducts, HttpStatus.OK);
+	}
+	
+	@GetMapping("/products/new-products")
+	public ResponseEntity<List<Product>> getNewProducts() {
+		List<Product> newTenProducts = pService.getNewTenProducts();
+		return new ResponseEntity<>(newTenProducts, HttpStatus.OK);
+	}
 }
