@@ -150,4 +150,10 @@ public class ProductController {
 		List<Product> newTenProducts = pService.getNewTenProducts();
 		return new ResponseEntity<>(newTenProducts, HttpStatus.OK);
 	}
+
+	@GetMapping("/products/seller/Top-products")
+	public ResponseEntity<List<Product>> getSellerTopProducts(@RequestHeader String token){
+		List<Product> sellerTopProducts = pService.getSellerTopProducts(token);
+		return new ResponseEntity<>(sellerTopProducts, HttpStatus.OK);
+	}
 }

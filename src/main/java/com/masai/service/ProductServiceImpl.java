@@ -213,6 +213,15 @@ public class ProductServiceImpl implements ProductService {
 		return newestProducts;
 	}
 
+	@Override
+	public List<Product> getSellerTopProducts(String token) {
+		Seller seller1 = sService.getCurrentlyLoggedInSeller(token);
+		Seller existingseller = sService.getSellerByMobile(seller1.getMobile(), token);
+		int sellerId = existingseller.getSellerId();
+		System.out.println("seller id : "+sellerId);
+		return prodDao.findSellerTopProducts(sellerId);
+	}
+
 
 	@Override
 	public List<ProductDTO> getAllProductsOfSeller(Integer id) {
