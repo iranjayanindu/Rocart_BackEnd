@@ -4,16 +4,13 @@ import java.util.List;
 
 import javax.validation.Valid;
 
+import com.masai.models.*;
 import org.hibernate.validator.constraints.Range;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import com.masai.models.CategoryEnum;
-import com.masai.models.Product;
-import com.masai.models.ProductDTO;
-import com.masai.models.ProductStatus;
 import com.masai.service.ProductService;
 
 import io.swagger.v3.oas.models.security.SecurityScheme.In;
@@ -128,6 +125,12 @@ public class ProductController {
 		 Product prod =   pService.updateProductQuantityWithId(id, prodDto);
 		
 		 return new ResponseEntity<Product>(prod,HttpStatus.ACCEPTED);
+	}
+
+	@GetMapping("/category/product-count")
+	public ResponseEntity<List<CategoryProductCountDTO>> getCategoryProductCount() {
+		List<CategoryProductCountDTO> response = pService.getCategoryProductCount();
+		return new ResponseEntity<>(response, HttpStatus.OK);
 	}
 
 }

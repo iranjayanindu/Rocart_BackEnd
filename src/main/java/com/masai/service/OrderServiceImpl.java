@@ -66,6 +66,7 @@ public class OrderServiceImpl implements OrderService {
 					List<CartItem> cartItemsList= loggedInCustomer.getCustomerCart().getCartItems();
 					
 					for(CartItem cartItem : cartItemsList ) {
+						int sellingCount = cartItem.getCartProduct().getSellingCount();
 						Integer remainingQuantity = cartItem.getCartProduct().getQuantity()-cartItem.getCartItemQuantity();
 						if(remainingQuantity < 0 || cartItem.getCartProduct().getStatus() == ProductStatus.OUTOFSTOCK) {
 							CartDTO cartdto = new CartDTO();
@@ -74,6 +75,7 @@ public class OrderServiceImpl implements OrderService {
 							throw new OrderException("Product "+ cartItem.getCartProduct().getProductName() + " OUT OF STOCK");
 						}
 						cartItem.getCartProduct().setQuantity(remainingQuantity);
+						cartItem.getCartProduct().setSellingCount(sellingCount+cartItem.getCartItemQuantity());
 						if(cartItem.getCartProduct().getQuantity()==0) {
 							cartItem.getCartProduct().setStatus(ProductStatus.OUTOFSTOCK);
 						}

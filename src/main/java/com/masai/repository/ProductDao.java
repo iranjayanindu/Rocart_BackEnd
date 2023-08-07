@@ -29,6 +29,9 @@ public interface ProductDao extends JpaRepository<Product, Integer> {
 	@Query("select new com.masai.models.ProductDTO(p.productName,p.manufacturer,p.price,p.quantity) "
 			+ "from Product p where p.seller.sellerId=:id")
 	public List<ProductDTO> getProductsOfASeller(@Param("id") Integer id);
+
+	@Query("SELECT p.category, COUNT(p) FROM Product p GROUP BY p.category")
+	List<Object[]> getCategoryProductCount();
 	
 
 }

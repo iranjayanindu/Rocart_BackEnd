@@ -3,11 +3,11 @@ package com.masai.service;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Paths;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
-import java.util.UUID;
+import java.time.Instant;
+import java.util.*;
+import java.util.stream.Collectors;
 
+import com.masai.models.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
@@ -15,11 +15,6 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.masai.exception.CategoryNotFoundException;
 import com.masai.exception.ProductNotFoundException;
-import com.masai.models.CategoryEnum;
-import com.masai.models.Product;
-import com.masai.models.ProductDTO;
-import com.masai.models.ProductStatus;
-import com.masai.models.Seller;
 import com.masai.repository.ProductDao;
 import com.masai.repository.SellerDao;
 import org.springframework.web.multipart.MultipartFile;
@@ -48,7 +43,7 @@ public class ProductServiceImpl implements ProductService {
 
 		Seller Existingseller = sService.getSellerByMobile(product.getSeller().getMobile(), token);
 		Optional<Seller> opt = sDao.findById(Existingseller.getSellerId());
-
+		product.setCreateTime(Date.from(Instant.now()));
 		if (opt.isPresent()) {
 			Seller seller = opt.get();
 			List<String> imageUrl = saveImages(imageFiles);
@@ -181,7 +176,26 @@ public class ProductServiceImpl implements ProductService {
 		return prod;
 	}
 
-	
+	@Override
+	public List<CategoryProductCountDTO> getCategoryProductCount() {
+		List<Object[]> results = prodDao.getCategoryProductCount();
+		Map<CategoryEnum, Long> categoryProductCountMap = results.stream()
+				.collect(Collectors.toMap(
+						result -> (CategoryEnum) result[0],
+						result -> (long) result[1]
+				));
+
+		List<CategoryProductCountDTO> response = new ArrayList<>();
+		for (CategoryEnum category : CategoryEnum.values()) {
+			CategoryProductCountDTO categoryResponse = new CategoryProductCountDTO();
+			categoryResponse.setCategory(category);
+			categoryResponse.setProductCount(categoryProductCountMap.getOrDefault(category, 0L));
+			response.add(categoryResponse);
+		}
+
+		return response;
+	}
+
 
 	@Override
 	public List<ProductDTO> getAllProductsOfSeller(Integer id) {

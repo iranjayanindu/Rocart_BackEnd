@@ -16,6 +16,7 @@ import lombok.Setter;
 import lombok.ToString;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 @Entity
@@ -40,6 +41,10 @@ public class Product {
 	private Double price;
 
 	private String description;
+
+	private Date createTime;
+
+	private int sellingCount;
 
 	@NotNull
 	private String manufacturer;

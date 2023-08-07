@@ -2,10 +2,7 @@ package com.masai.service;
 
 import java.util.List;
 
-import com.masai.models.CategoryEnum;
-import com.masai.models.Product;
-import com.masai.models.ProductDTO;
-import com.masai.models.ProductStatus;
+import com.masai.models.*;
 import org.springframework.web.multipart.MultipartFile;
 
 public interface ProductService {
@@ -30,4 +27,5 @@ public interface ProductService {
 	
 	public Product updateProductQuantityWithId(Integer id,ProductDTO prodDTO);
 
+	List<CategoryProductCountDTO> getCategoryProductCount();
 }
