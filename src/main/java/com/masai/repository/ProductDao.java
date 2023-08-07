@@ -32,6 +32,8 @@ public interface ProductDao extends JpaRepository<Product, Integer> {
 
 	@Query("SELECT p.category, COUNT(p) FROM Product p GROUP BY p.category")
 	List<Object[]> getCategoryProductCount();
-	
+
+
+	List<Product> findByProductNameContainingIgnoreCase(String partialName);
 
 }

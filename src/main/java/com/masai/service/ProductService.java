@@ -28,4 +28,6 @@ public interface ProductService {
 	public Product updateProductQuantityWithId(Integer id,ProductDTO prodDTO);
 
 	List<CategoryProductCountDTO> getCategoryProductCount();
+
+	List<Product> searchProductsByName(String productName);
 }

@@ -196,6 +196,11 @@ public class ProductServiceImpl implements ProductService {
 		return response;
 	}
 
+	@Override
+	public List<Product> searchProductsByName(String productName) {
+		return prodDao.findByProductNameContainingIgnoreCase(productName);
+	}
+
 
 	@Override
 	public List<ProductDTO> getAllProductsOfSeller(Integer id) {

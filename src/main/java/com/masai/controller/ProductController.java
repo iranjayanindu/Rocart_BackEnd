@@ -133,4 +133,9 @@ public class ProductController {
 		return new ResponseEntity<>(response, HttpStatus.OK);
 	}
 
+	@GetMapping("/search")
+	public ResponseEntity<List<Product>> searchProducts(@RequestParam("name") String productName) {
+		List<Product> products = pService.searchProductsByName(productName);
+		return new ResponseEntity<>(products, HttpStatus.OK);
+	}
 }
