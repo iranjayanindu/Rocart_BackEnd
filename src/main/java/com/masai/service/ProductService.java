@@ -36,4 +36,6 @@ public interface ProductService {
 	List<Product> getNewTenProducts();
 
 	List<Product> getSellerTopProducts(String token);
+
+
 }

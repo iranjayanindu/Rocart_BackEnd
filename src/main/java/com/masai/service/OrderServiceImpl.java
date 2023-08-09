@@ -3,21 +3,18 @@ package com.masai.service;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
+import com.masai.exception.CustomerNotFoundException;
+import com.masai.models.*;
+import com.masai.repository.CustomerDao;
+import com.masai.repository.SessionDao;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.masai.exception.LoginException;
 import com.masai.exception.OrderException;
-import com.masai.models.CartDTO;
-import com.masai.models.CartItem;
-import com.masai.models.Customer;
-import com.masai.models.Order;
-import com.masai.models.OrderDTO;
-import com.masai.models.OrderStatusValues;
-import com.masai.models.Product;
-import com.masai.models.ProductStatus;
 import com.masai.repository.OrderDao;
 
 @Service
@@ -27,9 +24,18 @@ public class OrderServiceImpl implements OrderService {
 	
 	@Autowired
 	private CustomerService cs;
+
+	@Autowired
+	private CustomerDao customerDao;
 	
 	@Autowired
 	private CartServiceImpl cartservicei;
+
+	@Autowired
+	private LoginLogoutService loginService;
+
+	@Autowired
+	private SessionDao sessionDao;
 	
 	
 	@Override
@@ -45,14 +51,21 @@ public class OrderServiceImpl implements OrderService {
 			String usersCardNumber= loggedInCustomer.getCreditCard().getCardNumber();
 			String userGivenCardNumber= odto.getCardNumber().getCardNumber();
 			List<CartItem> productsInCart= loggedInCustomer.getCustomerCart().getCartItems();
+			Map<String, Address> address = loggedInCustomer.getAddress();
 			List<CartItem> productsInOrder = new ArrayList<>(productsInCart);
 			
 			newOrder.setOrdercartItems(productsInOrder);
 			newOrder.setTotal(loggedInCustomer.getCustomerCart().getCartTotal());
 			
 			
-			
+			//check cart has items
 			if(productsInCart.size()!=0) {
+				//check the address
+				if(!address.containsKey(odto.getAddressType())){
+					throw new OrderException("Address does not exist");
+				}
+
+				//check user card
 				if((usersCardNumber.equals(userGivenCardNumber)) 
 						&& (odto.getCardNumber().getCardValidity().equals(loggedInCustomer.getCreditCard().getCardValidity())
 								&& (odto.getCardNumber().getCardCVV().equals(loggedInCustomer.getCreditCard().getCardCVV())))) {
@@ -63,10 +76,12 @@ public class OrderServiceImpl implements OrderService {
 					newOrder.setDate(LocalDate.now());
 					newOrder.setOrderStatus(OrderStatusValues.SUCCESS);
 					System.out.println(usersCardNumber);
+					//get item of the cart by user
 					List<CartItem> cartItemsList= loggedInCustomer.getCustomerCart().getCartItems();
 					
 					for(CartItem cartItem : cartItemsList ) {
 						int sellingCount = cartItem.getCartProduct().getSellingCount();
+						Integer sellerId = cartItem.getCartProduct().getSeller().getSellerId();
 						Integer remainingQuantity = cartItem.getCartProduct().getQuantity()-cartItem.getCartItemQuantity();
 						if(remainingQuantity < 0 || cartItem.getCartProduct().getStatus() == ProductStatus.OUTOFSTOCK) {
 							CartDTO cartdto = new CartDTO();
@@ -119,6 +134,20 @@ public class OrderServiceImpl implements OrderService {
 			return orders;
 		else
 			throw new OrderException("No Orders exists on your account");
+	}
+
+	@Override
+	public List<Order> getAllOrdersByCustomer(String token) throws OrderException {
+		loginService.checkTokenStatus(token);
+		UserSession user = sessionDao.findByToken(token).get();
+
+		Optional<Customer> opt = customerDao.findById(user.getUserId());
+
+		if(opt.isEmpty())
+			throw new CustomerNotFoundException("Customer does not exist");
+
+		List<Order> ordersByCustomerCustomerId = oDao.findOrdersByCustomerCustomerId(opt.get().getCustomerId());
+		return ordersByCustomerCustomerId;
 	}
 
 	@Override

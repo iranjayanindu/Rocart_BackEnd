@@ -49,6 +49,12 @@ public class OrderController {
 		return listOfAllOrders;
 		
 	}
+
+	@GetMapping("/orders/customer")
+	public List<Order> getAllOrderByCustomer(@RequestHeader String token){
+		List<Order> allOrdersByCustomer = oService.getAllOrdersByCustomer(token);
+		return allOrdersByCustomer;
+	}
 	
 	@GetMapping("/orders/{orderId}")
 	public Order getOrdersByOrderId(@PathVariable("orderId") Integer orderId) {

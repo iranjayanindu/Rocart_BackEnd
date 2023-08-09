@@ -156,4 +156,5 @@ public class ProductController {
 		List<Product> sellerTopProducts = pService.getSellerTopProducts(token);
 		return new ResponseEntity<>(sellerTopProducts, HttpStatus.OK);
 	}
+
 }

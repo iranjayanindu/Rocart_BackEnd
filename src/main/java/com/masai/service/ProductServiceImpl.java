@@ -223,6 +223,8 @@ public class ProductServiceImpl implements ProductService {
 	}
 
 
+
+
 	@Override
 	public List<ProductDTO> getAllProductsOfSeller(Integer id) {
 		
