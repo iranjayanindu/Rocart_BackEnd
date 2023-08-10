@@ -7,6 +7,7 @@ import java.time.Instant;
 import java.util.*;
 import java.util.stream.Collectors;
 
+import com.masai.exception.LoginException;
 import com.masai.models.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -30,6 +31,9 @@ public class ProductServiceImpl implements ProductService {
 
 	@Autowired
 	private SellerDao sDao;
+
+	@Autowired
+	private LoginLogoutService loginService;
 
 	@Value("${upload.path}") // Spring Boot property for the file upload path.
 	private String uploadPath;
@@ -222,8 +226,38 @@ public class ProductServiceImpl implements ProductService {
 		return prodDao.findSellerTopProducts(sellerId);
 	}
 
+	@Override
+	public Product updateRating(String token, int rate, Integer id) throws Exception {
 
+		if(token.contains("customer") == false) {
+			throw new LoginException("Invalid session token for customer");
+		}
 
+		loginService.checkTokenStatus(token);
+
+		Product product = prodDao.findById(id)
+				.orElseThrow(() -> new ProductNotFoundException("Product not found"));
+
+		if (rate >= 1 && rate <= 5) {
+			int totalRating = product.getTotalRating() + rate;
+			int numRating = product.getNumRatings() + 1;
+			product.setTotalRating(totalRating);
+			product.setNumRatings(numRating);
+			product.setAvgRating(calculateAverageRating(totalRating,numRating));
+			return prodDao.save(product);
+
+		} else {
+			throw new IllegalArgumentException("Rating must be between 1 and 5");
+		}
+	}
+
+	private double calculateAverageRating(int totalRating, int numRating) {
+		if (numRating > 0) {
+			return (double) totalRating / numRating;
+		} else {
+			return 0.0;
+		}
+	}
 
 	@Override
 	public List<ProductDTO> getAllProductsOfSeller(Integer id) {

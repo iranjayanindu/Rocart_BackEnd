@@ -46,6 +46,12 @@ public class Product {
 
 	private int sellingCount;
 
+	private int totalRating;
+
+	private int numRatings;
+
+	private double avgRating;
+
 	@NotNull
 	private String manufacturer;
 

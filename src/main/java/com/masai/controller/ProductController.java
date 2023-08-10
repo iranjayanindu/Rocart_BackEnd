@@ -157,4 +157,10 @@ public class ProductController {
 		return new ResponseEntity<>(sellerTopProducts, HttpStatus.OK);
 	}
 
+	@PutMapping("/product/customer/rating")
+	public ResponseEntity<Product> addRatingbycustomer(@RequestHeader String token,@RequestParam("rate") int rating,@RequestParam("id") Integer productId) throws Exception {
+		Product product = pService.updateRating(token, rating, productId);
+		return new ResponseEntity<>(product,HttpStatus.ACCEPTED);
+	}
+
 }
