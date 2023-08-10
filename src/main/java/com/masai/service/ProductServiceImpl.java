@@ -147,7 +147,7 @@ public class ProductServiceImpl implements ProductService {
 				System.out.println("file name : "+fileName);
 				String filePath = Paths.get(uploadPath, fileName).toString();
 				imageFile.transferTo(new File(filePath));
-				imageUrls.add("/images/" + fileName); // Add the relative URL to the list.
+				imageUrls.add(fileName); // Add the relative URL to the list.
 			} catch (IOException e) {
 				// Handle the exception as needed.
 				throw new RuntimeException("Failed to save image.", e);
