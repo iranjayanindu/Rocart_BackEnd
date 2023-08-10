@@ -34,5 +34,6 @@ public interface OrderDao extends JpaRepository<Order, Integer> {
 //	@Query("update Order o set o.orderStatus =OrderStatusValues.CANCELLED WHERE o.OrderId=OrderId ")
 //	public Order CancelOrderByOrderId(@Param("OrderId") Integer OrderId);
 
+
 	
 }

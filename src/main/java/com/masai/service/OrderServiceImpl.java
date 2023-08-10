@@ -1,14 +1,13 @@
 package com.masai.service;
 
+import java.time.Instant;
 import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
+import java.util.*;
 
 import com.masai.exception.CustomerNotFoundException;
 import com.masai.models.*;
 import com.masai.repository.CustomerDao;
+import com.masai.repository.SellerNotificationDao;
 import com.masai.repository.SessionDao;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -36,6 +35,9 @@ public class OrderServiceImpl implements OrderService {
 
 	@Autowired
 	private SessionDao sessionDao;
+
+	@Autowired
+	private SellerNotificationDao sellerNotificationDao;
 	
 	
 	@Override
@@ -91,6 +93,18 @@ public class OrderServiceImpl implements OrderService {
 						}
 						cartItem.getCartProduct().setQuantity(remainingQuantity);
 						cartItem.getCartProduct().setSellingCount(sellingCount+cartItem.getCartItemQuantity());
+						SellerOrdersNotification ordersNotification = new SellerOrdersNotification();
+						ordersNotification.setDateCreate(Date.from(Instant.now()));
+						ordersNotification.setQty(cartItem.getCartItemQuantity());
+						ordersNotification.setProductid(cartItem.getCartProduct().getProductId());
+						ordersNotification.setQty(cartItem.getCartItemQuantity());
+						ordersNotification.setAddressType(odto.getAddressType());
+						ordersNotification.setSellerId(sellerId);
+						ordersNotification.setCustomerId(loggedInCustomer.getCustomerId());
+						ordersNotification.setOrderStatus(OrderStatusValues.NEW);
+						ordersNotification.setNotificationStatus(NotificationStatus.NOTREAD);
+						sellerNotificationDao.save(ordersNotification);
+						System.out.println("seller id "+sellerId);
 						if(cartItem.getCartProduct().getQuantity()==0) {
 							cartItem.getCartProduct().setStatus(ProductStatus.OUTOFSTOCK);
 						}
