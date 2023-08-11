@@ -12,12 +12,14 @@ import java.util.List;
 @Repository
 public interface SellerNotificationDao extends JpaRepository<SellerOrdersNotification,Integer> {
 
-    @Query(value = "SELECT COUNT(*) AS notification_count FROM seller_orders_notification WHERE notification_status = :type",nativeQuery = true)
-    int getNotificationCount(@Param("type")String type);
+    @Query(value = "SELECT COUNT(*) AS notification_count FROM seller_orders_notification WHERE notification_status = :type && seller_id = :id",nativeQuery = true)
+    int getNotificationCount(@Param("type")String type,@Param("id")String id);
 
-    @Query(value = "SELECT * FROM seller_orders_notification WHERE notification_status = :type ORDER BY date_create DESC",nativeQuery = true)
-    List<SellerOrdersNotification> getNotification(@Param("type")String type);
+    @Query(value = "SELECT * FROM seller_orders_notification WHERE notification_status = :type && seller_id = :id ORDER BY date_create DESC",nativeQuery = true)
+    List<SellerOrdersNotification> getNotification(@Param("type")String type,@Param("id")String id);
 
+    @Query(value = "SELECT * FROM seller_orders_notification where seller_id = :id ORDER BY date_create DESC", nativeQuery = true)
+    List<SellerOrdersNotification> getAllOrdersBySeller(@Param("id")String id);
 
 
 }

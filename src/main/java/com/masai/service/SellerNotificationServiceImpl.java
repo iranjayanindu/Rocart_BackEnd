@@ -1,6 +1,7 @@
 package com.masai.service;
 
 import com.masai.models.NotificationStatus;
+import com.masai.models.Seller;
 import com.masai.models.SellerOrdersNotification;
 import com.masai.repository.SellerNotificationDao;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,17 +15,29 @@ public class SellerNotificationServiceImpl implements SellerNotificationService{
     @Autowired
     private SellerNotificationDao sellerNotificationDao;
 
+    @Autowired
+    private SellerService sService;
+
     @Override
-    public int notificationCount() throws Exception {
-        String notread = String.valueOf(NotificationStatus.NOTREAD);
-        int notificationCount = sellerNotificationDao.getNotificationCount(notread);
-        return notificationCount;
+    public int notificationCount(String token) throws Exception {
+        Seller seller1 = sService.getCurrentlyLoggedInSeller(token);
+        String sellerId = String.valueOf(seller1.getSellerId());
+        String notRead = String.valueOf(NotificationStatus.NOTREAD);
+        return sellerNotificationDao.getNotificationCount(notRead,sellerId);
     }
 
     @Override
-    public List<SellerOrdersNotification> getNotification() {
-        String notread = String.valueOf(NotificationStatus.NOTREAD);
-        List<SellerOrdersNotification> notification = sellerNotificationDao.getNotification(notread);
-        return notification;
+    public List<SellerOrdersNotification> getNotification(String token) {
+        Seller seller1 = sService.getCurrentlyLoggedInSeller(token);
+        String sellerId = String.valueOf(seller1.getSellerId());
+        String notRead = String.valueOf(NotificationStatus.NOTREAD);
+        return sellerNotificationDao.getNotification(notRead,sellerId);
+    }
+
+    @Override
+    public List<SellerOrdersNotification> getAllOrdersByCustomer(String token) {
+        Seller seller1 = sService.getCurrentlyLoggedInSeller(token);
+        String sellerId = String.valueOf(seller1.getSellerId());
+        return sellerNotificationDao.getAllOrdersBySeller(sellerId);
     }
 }

@@ -6,7 +6,10 @@ import java.util.List;
 
 public interface SellerNotificationService {
 
-    public int notificationCount()throws Exception;
+    public int notificationCount(String token)throws Exception;
 
-    public List<SellerOrdersNotification> getNotification();
+    public List<SellerOrdersNotification> getNotification(String token);
+
+    public List<SellerOrdersNotification> getAllOrdersByCustomer(String token);
+
 }
