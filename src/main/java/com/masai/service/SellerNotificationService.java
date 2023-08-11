@@ -12,4 +12,7 @@ public interface SellerNotificationService {
 
     public List<SellerOrdersNotification> getAllOrdersByCustomer(String token);
 
+    public SellerOrdersNotification updateOrderNotification(int sellerId);
+
+    public SellerOrdersNotification updateOrderDilevery(int notificationId, int i);
 }

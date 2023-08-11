@@ -6,9 +6,7 @@ import org.apache.catalina.LifecycleState;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestHeader;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -28,6 +26,18 @@ public class NotificationController {
     public ResponseEntity<List<SellerOrdersNotification>> getNotification(@RequestHeader String token){
         List<SellerOrdersNotification> notification = sellerNotificationService.getNotification(token);
         return new ResponseEntity<>(notification,HttpStatus.OK);
+    }
+
+    @PutMapping("/notification/read")
+    public ResponseEntity<SellerOrdersNotification> updateNotificationStatus(@RequestParam int id){
+        SellerOrdersNotification sellerOrdersNotification = sellerNotificationService.updateOrderNotification(id);
+        return new ResponseEntity<>(sellerOrdersNotification,HttpStatus.CREATED);
+    }
+
+    @PutMapping("/update/order")
+    public ResponseEntity<SellerOrdersNotification> updaterOderStatus(@RequestParam int notiId ,@RequestParam int type){
+        SellerOrdersNotification sellerOrdersNotification = sellerNotificationService.updateOrderDilevery(notiId,type);
+        return new ResponseEntity<>(sellerOrdersNotification,HttpStatus.CREATED);
     }
 
     @GetMapping("/seller/orders")
