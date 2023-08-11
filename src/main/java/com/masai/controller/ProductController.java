@@ -51,7 +51,7 @@ public class ProductController {
 
 	}
 
-	@PutMapping("/products/add")
+	@PostMapping("/products/add")
 	public ResponseEntity<Product> addProductToCatalogHandler(@RequestHeader("token") String token,@RequestBody Product product){
 		Product product1 = pService.addProduct(token, product);
 		return new ResponseEntity<Product>(product1, HttpStatus.ACCEPTED);
