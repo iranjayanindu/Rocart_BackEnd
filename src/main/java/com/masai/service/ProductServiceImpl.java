@@ -71,6 +71,38 @@ public class ProductServiceImpl implements ProductService {
 	}
 
 	@Override
+	public Product addProduct(String token, Product product) {
+		Product prod = null;
+		Seller seller1 = sService.getCurrentlyLoggedInSeller(token);
+		product.setSeller(seller1);
+
+		Seller Existingseller = sService.getSellerByMobile(product.getSeller().getMobile(), token);
+		Optional<Seller> opt = sDao.findById(Existingseller.getSellerId());
+		product.setCreateTime(Date.from(Instant.now()));
+		if (opt.isPresent()) {
+			Seller seller = opt.get();
+			List<String> imageUrls = product.getImageUrls();
+			product.setSeller(seller);
+			product.setImageUrls(imageUrls);
+
+			prod = prodDao.save(product);
+			;
+
+			seller.getProduct().add(product);
+			sDao.save(seller);
+
+		} else {
+			List<String> imageUrl = product.getImageUrls();
+			prod.setImageUrls(imageUrl);
+			prod = prodDao.save(product);
+			;
+		}
+
+		return prod;
+
+	}
+
+	@Override
 	public Product getProductFromCatalogById(Integer id) throws ProductNotFoundException {
 
 		Optional<Product> opt = prodDao.findById(id);

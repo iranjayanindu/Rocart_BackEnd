@@ -9,6 +9,8 @@ public interface ProductService {
 
 	public Product addProductToCatalog(String token, Product product,MultipartFile[] imageFiles);
 
+	public Product addProduct(String token, Product product);
+
 	public Product getProductFromCatalogById(Integer id);
 
 	public String deleteProductFromCatalog(Integer id);

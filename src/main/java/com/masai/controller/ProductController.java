@@ -51,6 +51,12 @@ public class ProductController {
 
 	}
 
+	@PutMapping("/products/add")
+	public ResponseEntity<Product> addProductToCatalogHandler(@RequestHeader("token") String token,@RequestBody Product product){
+		Product product1 = pService.addProduct(token, product);
+		return new ResponseEntity<Product>(product1, HttpStatus.ACCEPTED);
+	}
+
 	// This method gets the product which needs to be added to the cart returns
 	// product
 
@@ -59,7 +65,7 @@ public class ProductController {
 
 		Product prod = pService.getProductFromCatalogById(id);
 
-		return new ResponseEntity<Product>(prod, HttpStatus.FOUND);
+		return new ResponseEntity<Product>(prod, HttpStatus.OK);
 
 	}
 
