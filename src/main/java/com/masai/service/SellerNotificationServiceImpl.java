@@ -33,6 +33,32 @@ public class SellerNotificationServiceImpl implements SellerNotificationService{
     }
 
     @Override
+    public int sellerOrderStatuesCount(String token, int i) throws Exception {
+        OrderStatusValues preparing;
+        switch (i){
+            case 1:
+                preparing = OrderStatusValues.PREPARING;
+                break;
+            case 2:
+                preparing = OrderStatusValues.SEND;
+                break;
+            case 3:
+                preparing = OrderStatusValues.DELIVERED;
+                break;
+            default:
+                preparing = OrderStatusValues.NEW;
+        }
+        Seller seller1 = sService.getCurrentlyLoggedInSeller(token);
+        String sellerId = String.valueOf(seller1.getSellerId());
+        String orderStatue = String.valueOf(preparing);
+        int sellerOrderStatusCount = sellerNotificationDao.getSellerOrderStatusCount(orderStatue, sellerId);
+        if(sellerOrderStatusCount == 0)
+            return 0;
+        return sellerOrderStatusCount;
+    }
+
+
+    @Override
     public List<SellerOrdersNotification> getNotification(String token) {
         Seller seller1 = sService.getCurrentlyLoggedInSeller(token);
         String sellerId = String.valueOf(seller1.getSellerId());
@@ -45,6 +71,29 @@ public class SellerNotificationServiceImpl implements SellerNotificationService{
         Seller seller1 = sService.getCurrentlyLoggedInSeller(token);
         String sellerId = String.valueOf(seller1.getSellerId());
         return sellerNotificationDao.getAllOrdersBySeller(sellerId);
+    }
+
+    @Override
+    public List<SellerOrdersNotification> getAllOrdersByStatus(String token, int status) {
+        OrderStatusValues preparing;
+        switch (status){
+            case 1:
+                preparing = OrderStatusValues.PREPARING;
+                break;
+            case 2:
+                preparing = OrderStatusValues.SEND;
+                break;
+            case 3:
+                preparing = OrderStatusValues.DELIVERED;
+                break;
+            default:
+                preparing = OrderStatusValues.NEW;
+        }
+        Seller seller1 = sService.getCurrentlyLoggedInSeller(token);
+        String sellerId = String.valueOf(seller1.getSellerId());
+        String orderStatue = String.valueOf(preparing);
+        return sellerNotificationDao.getAllOrdersByStatus(sellerId,orderStatue);
+
     }
 
     @Override
@@ -74,7 +123,7 @@ public class SellerNotificationServiceImpl implements SellerNotificationService{
         Optional<SellerOrdersNotification> byId = sellerNotificationDao.findById(notificationId);
         SellerOrdersNotification sellerOrdersNotification = byId.get();
         sellerOrdersNotification.setOrderStatus(preparing);
-        sellerNotificationDao.save(sellerOrdersNotification);
-        return null;
+
+        return sellerNotificationDao.save(sellerOrdersNotification);
     }
 }

@@ -45,4 +45,16 @@ public class NotificationController {
         List<SellerOrdersNotification> allOrdersByCustomer = sellerNotificationService.getAllOrdersByCustomer(token);
         return new ResponseEntity<>(allOrdersByCustomer,HttpStatus.OK);
     }
+
+    @GetMapping("/seller/order/status/count")
+    public ResponseEntity<Integer> getSellerOrdersStatusCount(@RequestHeader String token,@RequestParam int status)throws Exception{
+        int i = sellerNotificationService.sellerOrderStatuesCount(token, status);
+        return new ResponseEntity<>(i,HttpStatus.OK);
+    }
+
+    @GetMapping("/seller/orders/by/status")
+    public ResponseEntity<List<SellerOrdersNotification>> getSellerOrderByStatusList(@RequestHeader String token,@RequestParam int status){
+        List<SellerOrdersNotification> allOrdersByStatus = sellerNotificationService.getAllOrdersByStatus(token, status);
+        return new ResponseEntity<>(allOrdersByStatus,HttpStatus.OK);
+    }
 }

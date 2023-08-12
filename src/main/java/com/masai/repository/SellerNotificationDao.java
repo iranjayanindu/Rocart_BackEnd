@@ -21,5 +21,9 @@ public interface SellerNotificationDao extends JpaRepository<SellerOrdersNotific
     @Query(value = "SELECT * FROM seller_orders_notification where seller_id = :id ORDER BY date_create DESC", nativeQuery = true)
     List<SellerOrdersNotification> getAllOrdersBySeller(@Param("id")String id);
 
+    @Query(value = "SELECT COUNT(*) AS notification_count FROM seller_orders_notification WHERE order_status = :type && seller_id = :id",nativeQuery = true)
+    int getSellerOrderStatusCount(@Param("type")String type,@Param("id")String id);
 
+    @Query(value = "SELECT * FROM seller_orders_notification where order_status = :type && seller_id = :id ORDER BY date_create DESC", nativeQuery = true)
+    List<SellerOrdersNotification> getAllOrdersByStatus(@Param("id")String id,@Param("type")String type);
 }
