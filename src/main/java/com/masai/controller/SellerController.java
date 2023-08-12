@@ -4,6 +4,7 @@ import java.util.List;
 
 import javax.validation.Valid;
 
+import com.masai.models.SellerGetDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -59,11 +60,17 @@ public class SellerController {
 	
 	
 	@GetMapping("/seller/{sellerId}")
-	public ResponseEntity<Seller> getSellerByIdHandler(@PathVariable("sellerId") Integer Id){
+	public ResponseEntity<SellerGetDTO> getSellerByIdHandler(@PathVariable("sellerId") Integer Id){
 		
 		Seller getSeller=sService.getSellerById(Id);
-		
-		return new ResponseEntity<Seller>(getSeller, HttpStatus.OK);
+		SellerGetDTO build = SellerGetDTO.builder()
+				.sellerId(getSeller.getSellerId())
+				.firstName(getSeller.getFirstName())
+				.lastName(getSeller.getLastName())
+				.mobile(getSeller.getMobile())
+				.emailId(getSeller.getEmailId())
+				.product(getSeller.getProduct()).build();
+		return new ResponseEntity<SellerGetDTO>(build, HttpStatus.OK);
 	}
 	
 	
