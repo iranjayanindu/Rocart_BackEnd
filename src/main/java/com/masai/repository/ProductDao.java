@@ -48,4 +48,7 @@ public interface ProductDao extends JpaRepository<Product, Integer> {
 	@Query(value = "SELECT  * FROM product WHERE seller_seller_id = :count ", nativeQuery = true)
 	List<Product> findSellerAllProducts(@Param("count") int count);
 
+	@Query(value = "SELECT COUNT(*) AS notification_count FROM product WHERE seller_seller_id = :id",nativeQuery = true)
+	int getSellerProductsCount(@Param("id")int id);
+
 }

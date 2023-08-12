@@ -269,6 +269,16 @@ public class ProductServiceImpl implements ProductService {
 	}
 
 	@Override
+	public int getSellerProductsCount(String token) {
+		Seller seller1 = sService.getCurrentlyLoggedInSeller(token);
+		Seller existingseller = sService.getSellerByMobile(seller1.getMobile(), token);
+		int sellerId = existingseller.getSellerId();
+		System.out.println("seller id : "+sellerId);
+		int sellerProductsCount = prodDao.getSellerProductsCount(sellerId);
+		return sellerProductsCount;
+	}
+
+	@Override
 	public Product updateRating(String token, int rate, Integer id) throws Exception {
 
 		if(token.contains("customer") == false) {

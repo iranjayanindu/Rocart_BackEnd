@@ -41,6 +41,8 @@ public interface ProductService {
 
 	List<Product> getSellerTopProducts(String token);
 
+	int getSellerProductsCount(String token);
+
 	Product updateRating(String token,int rate,Integer id)throws Exception;
 
 }

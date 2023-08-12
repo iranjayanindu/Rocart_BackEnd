@@ -170,6 +170,12 @@ public class ProductController {
 		return new ResponseEntity<>(sellerTopProducts, HttpStatus.OK);
 	}
 
+	@GetMapping("/products/seller/products/count")
+	public ResponseEntity<Integer> getSellerProductsCount(@RequestHeader String token){
+		int count = pService.getSellerProductsCount(token);
+		return new ResponseEntity<>(count, HttpStatus.OK);
+	}
+
 	@PutMapping("/product/customer/rating")
 	public ResponseEntity<Product> addRatingbycustomer(@RequestHeader String token,@RequestParam("rate") int rating,@RequestParam("id") Integer productId) throws Exception {
 		Product product = pService.updateRating(token, rating, productId);
