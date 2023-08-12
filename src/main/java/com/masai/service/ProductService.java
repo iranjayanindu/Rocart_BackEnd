@@ -18,7 +18,9 @@ public interface ProductService {
 	public Product updateProductIncatalog(Product product);
 	
 	public List<Product> getAllProductsIncatalog();
-	
+
+	public List<Product> getAllSellerProducts(String token);
+
 	public List<ProductDTO> getAllProductsOfSeller(Integer id);
 	
 	public List<ProductDTO> getProductsOfCategory(CategoryEnum catenum);

@@ -153,6 +153,16 @@ public class ProductServiceImpl implements ProductService {
 	}
 
 	@Override
+	public List<Product> getAllSellerProducts(String token) {
+		Seller seller1 = sService.getCurrentlyLoggedInSeller(token);
+		Seller existingseller = sService.getSellerByMobile(seller1.getMobile(), token);
+		int sellerId = existingseller.getSellerId();
+		System.out.println("seller id : "+sellerId);
+		List<Product> sellerAllProducts = prodDao.findSellerAllProducts(sellerId);
+		return sellerAllProducts;
+	}
+
+	@Override
 	public List<ProductDTO> getProductsOfCategory(CategoryEnum catenum) {
 
 		List<ProductDTO> list = prodDao.getAllProductsInACategory(catenum);
