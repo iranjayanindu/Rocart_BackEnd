@@ -301,9 +301,12 @@ public class CustomerServiceImpl implements CustomerService{
 			throw new CustomerNotFoundException("Customer does not exist");
 		
 		Customer existingCustomer = opt.get();
-		
+
+		address.setType(type);
+
 		existingCustomer.getAddress().put(type, address);
-		
+
+
 		return customerDao.save(existingCustomer);
 		
 	}

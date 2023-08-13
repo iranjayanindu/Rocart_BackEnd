@@ -53,6 +53,8 @@ public class  Address {
 	@NotNull(message = "Pincode cannot be null")
 	@Pattern(regexp = "[0-9]{5}", message = "Pincode not valid. Must be 6 digits")
 	private String pincode;
+
+	private String type;
 	
 	
 	@ManyToOne(cascade = CascadeType.ALL)
