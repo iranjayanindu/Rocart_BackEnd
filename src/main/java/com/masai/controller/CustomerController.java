@@ -36,7 +36,7 @@ public class CustomerController {
 	
 	@GetMapping("/customer/current")
 	public ResponseEntity<Customer> getLoggedInCustomerDetailsHandler(@RequestHeader("token") String token){
-		return new ResponseEntity<>(customerService.getLoggedInCustomerDetails(token), HttpStatus.ACCEPTED);
+		return new ResponseEntity<>(customerService.getLoggedInCustomerDetails(token), HttpStatus.OK);
 	}
 	
 	

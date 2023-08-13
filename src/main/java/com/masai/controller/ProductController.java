@@ -52,7 +52,7 @@ public class ProductController {
 	}
 
 	@PostMapping("/products/add")
-	public ResponseEntity<Product> addProductToCatalogHandler(@RequestHeader("token") String token,@RequestBody Product product){
+	public ResponseEntity<Product> addProductToCatalogHandler(@RequestHeader("token") String token,@RequestBody Product product) throws Exception {
 		Product product1 = pService.addProduct(token, product);
 		return new ResponseEntity<Product>(product1, HttpStatus.ACCEPTED);
 	}

@@ -71,7 +71,7 @@ public class ProductServiceImpl implements ProductService {
 	}
 
 	@Override
-	public Product addProduct(String token, Product product) {
+	public Product addProduct(String token, Product product) throws Exception{
 		Product prod = null;
 		Seller seller1 = sService.getCurrentlyLoggedInSeller(token);
 		product.setSeller(seller1);
@@ -325,6 +325,24 @@ public class ProductServiceImpl implements ProductService {
 		else {
 			throw new ProductNotFoundException("No products with SellerId: "+id);
 		}
+	}
+
+
+	public List<Product> findProductImage(Product product)throws Exception {
+
+		List<String> imageUrls = product.getImageUrls();
+		int count=0;
+		for (String s :
+				imageUrls) {
+			count++;
+			List<Product> images = prodDao.findImages(s);
+			if(!images.isEmpty()){
+				throw new Exception("Image "+count+" is detected as duplicate image");
+			}
+		}
+
+
+		return null;
 	}
 
 }

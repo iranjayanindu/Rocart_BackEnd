@@ -9,7 +9,7 @@ public interface ProductService {
 
 	public Product addProductToCatalog(String token, Product product,MultipartFile[] imageFiles);
 
-	public Product addProduct(String token, Product product);
+	public Product addProduct(String token, Product product) throws Exception;
 
 	public Product getProductFromCatalogById(Integer id);
 
@@ -22,6 +22,8 @@ public interface ProductService {
 	public List<Product> getAllSellerProducts(String token);
 
 	public List<ProductDTO> getAllProductsOfSeller(Integer id);
+
+	List<Product> findProductImage(Product product) throws Exception;
 	
 	public List<ProductDTO> getProductsOfCategory(CategoryEnum catenum);
 	
