@@ -1,10 +1,7 @@
 package com.masai.service;
 
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
+import java.util.*;
 
 import com.masai.models.*;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -50,7 +47,8 @@ public class CustomerServiceImpl implements CustomerService{
 		
 		if(existing.isPresent())
 			throw new CustomerException("Customer already exists. Please try to login with your mobile no");
-		
+
+
 		customerDao.save(customer);
 		
 		return customer;
@@ -77,7 +75,11 @@ public class CustomerServiceImpl implements CustomerService{
 			throw new CustomerNotFoundException("Customer does not exist");
 		
 		Customer existingCustomer = opt.get();
-		
+
+		if(existingCustomer.getAddress().isEmpty()){
+			existingCustomer.setAddress(null);
+		}
+
 		return existingCustomer;
 	}
 	
