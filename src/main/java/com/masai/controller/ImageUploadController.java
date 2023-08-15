@@ -40,9 +40,9 @@ public class ImageUploadController {
 
             Files.copy(file.getInputStream(), filePath, StandardCopyOption.REPLACE_EXISTING);
 
-            DuplicatesDTO forObject = restTemplate.getForObject(url, DuplicatesDTO.class);
-            System.out.println("object : "+ forObject.getDuplicates().isEmpty());
-            if(forObject.getDuplicates().isEmpty()){
+            //DuplicatesDTO forObject = restTemplate.getForObject(url, DuplicatesDTO.class);
+            //System.out.println("object : "+ forObject.getDuplicates().isEmpty());
+            if(true){
                 AiDTO build = AiDTO.builder()
                         .duplicate(false)
                         .build();

@@ -357,7 +357,7 @@ public class ProductServiceImpl implements ProductService {
 	@Override
 	public Resource loadImage() {
 		String image = "IMG-20230814-WA0010.jpg";
-		return resourceLoader.getResource("D:/Education/SLIIT/copy projects/ECommerce-SpringBoot-Backend-Project/E-Commerce-Backend/uploads/IMG-20230814-WA0010.jpg" );
+		return resourceLoader.getResource("D:/image/IMG-20230814-WA0021.jpg" );
 	}
 
 }
