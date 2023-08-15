@@ -3,6 +3,7 @@ package com.masai.service;
 import java.util.List;
 
 import com.masai.models.*;
+import org.springframework.core.io.Resource;
 import org.springframework.web.multipart.MultipartFile;
 
 public interface ProductService {
@@ -46,5 +47,7 @@ public interface ProductService {
 	int getSellerProductsCount(String token);
 
 	Product updateRating(String token,int rate,Integer id)throws Exception;
+
+	public Resource loadImage();
 
 }

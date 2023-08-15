@@ -8,9 +8,10 @@ import com.masai.models.*;
 import org.hibernate.validator.constraints.Range;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
+import org.springframework.core.io.Resource;
 import com.masai.service.ProductService;
 
 import io.swagger.v3.oas.models.security.SecurityScheme.In;
@@ -182,4 +183,13 @@ public class ProductController {
 		return new ResponseEntity<>(product,HttpStatus.ACCEPTED);
 	}
 
+	@GetMapping("/images")
+	public ResponseEntity<Resource> getImage() {
+		Resource imageResource = pService.loadImage();
+
+		// Return the image as a ResponseEntity with appropriate content type
+		return ResponseEntity.ok()
+				.contentType(MediaType.IMAGE_JPEG) // Adjust content type based on image type
+				.body(imageResource);
+	}
 }

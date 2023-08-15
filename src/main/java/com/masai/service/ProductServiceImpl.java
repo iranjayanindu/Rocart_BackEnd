@@ -6,11 +6,12 @@ import java.nio.file.Paths;
 import java.time.Instant;
 import java.util.*;
 import java.util.stream.Collectors;
-
+import org.springframework.core.io.Resource;
 import com.masai.exception.LoginException;
 import com.masai.models.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.core.io.ResourceLoader;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.ResponseBody;
 
@@ -34,6 +35,9 @@ public class ProductServiceImpl implements ProductService {
 
 	@Autowired
 	private LoginLogoutService loginService;
+
+	@Autowired
+	private ResourceLoader resourceLoader;
 
 	@Value("${upload.path}") // Spring Boot property for the file upload path.
 	private String uploadPath;
@@ -303,6 +307,8 @@ public class ProductServiceImpl implements ProductService {
 		}
 	}
 
+
+
 	private double calculateAverageRating(int totalRating, int numRating) {
 		if (numRating > 0) {
 			return (double) totalRating / numRating;
@@ -343,6 +349,15 @@ public class ProductServiceImpl implements ProductService {
 
 
 		return null;
+	}
+
+//	public Resource getImage(String imageName) {
+//		return resourceLoader.getResource("file:/path/to/your/upload/directory/" + imageName);
+//	}
+	@Override
+	public Resource loadImage() {
+		String image = "IMG-20230814-WA0010.jpg";
+		return resourceLoader.getResource("D:/Education/SLIIT/copy projects/ECommerce-SpringBoot-Backend-Project/E-Commerce-Backend/uploads/IMG-20230814-WA0010.jpg" );
 	}
 
 }
